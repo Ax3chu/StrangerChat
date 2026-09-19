@@ -9,7 +9,9 @@ const io = new Server(server);
 const path = require("path");
 
 app.use(express.static(path.join(__dirname, "public")));;
-
+app.get("/", (req, res) => {
+    res.send("StrangerChat server is working!");
+});
 let waitingUser = null;
 
 io.on("connection", (socket) => {
