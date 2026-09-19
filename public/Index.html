@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StrangerChat</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+  
+
+<body>
+
+<div class="app">
+
+    <!-- HOME SCREEN -->
+
+    <div id="homeScreen">
+
+        <div class="logo">
+            StrangerChat
+        </div>
+
+        <p class="subtitle">
+            Meet someone new. Text only.
+        </p>
+
+        <input
+            type="text"
+            id="nickname"
+            placeholder="Choose a nickname"
+            maxlength="20"
+        >
+
+        <button onclick="startChat()">
+            Start Chatting
+        </button>
+
+        <p class="info">
+            No photos • No calls • Text only
+        </p>
+
+    </div>
+
+
+    <!-- CHAT SCREEN -->
+
+    <div id="chatScreen">
+
+        <div class="chatHeader">
+
+            <div>
+                <b>StrangerChat</b>
+
+                <small id="status">
+                    Finding stranger...
+                </small>
+            </div>
+
+            <button
+                class="nextButton"
+                onclick="nextStranger()">
+                Next
+            </button>
+
+        </div>
+
+
+        <div id="messages">
+
+            <div class="systemMessage">
+                Finding someone to chat with...
+            </div>
+
+        </div>
+
+
+        <div class="messageArea">
+
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Type a message..."
+                maxlength="500"
+                onkeypress="handleEnter(event)"
+            >
+
+            <button onclick="sendMessage()">
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
