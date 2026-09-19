@@ -1,5 +1,4 @@
-// StrangerChat client
-// Real-time connection will be connected to the online server later.
+const socket = io();
 
 let nickname = "";
 
@@ -14,12 +13,30 @@ function startChat() {
     document.getElementById("homeScreen").style.display = "none";
     document.getElementById("chatScreen").style.display = "flex";
 
+    document.getElementById("messages").innerHTML =
+        '<div class="systemMessage">Finding a stranger...</div>';
+
+    document.getElementById("status").textContent =
+        "Finding stranger...";
+
+    socket.emit("joinChat");
+}
+
+socket.on("waiting", () => {
     document.getElementById("status").textContent =
         "Waiting for a stranger...";
 
     document.getElementById("messages").innerHTML =
         '<div class="systemMessage">Waiting for a stranger...</div>';
-}
+});
+
+socket.on("matched", () => {
+    document.getElementById("status").textContent =
+        "Connected to a stranger";
+
+    document.getElementById("messages").innerHTML =
+        '<div class="systemMessage">You are now connected! 👋</div>';
+});
 
 function sendMessage() {
     const input = document.getElementById("messageInput");
@@ -27,9 +44,15 @@ function sendMessage() {
 
     if (!text) return;
 
+    socket.emit("message", text);
     addMessage(text, true);
+
     input.value = "";
 }
+
+socket.on("message", (message) => {
+    addMessage(message, false);
+});
 
 function addMessage(text, mine) {
     const messages = document.getElementById("messages");
@@ -59,4 +82,14 @@ function nextStranger() {
 
     document.getElementById("status").textContent =
         "Finding stranger...";
+
+    socket.emit("next");
 }
+
+socket.on("partnerLeft", () => {
+    document.getElementById("status").textContent =
+        "Stranger disconnected";
+
+    document.getElementById("messages").innerHTML =
+        '<div class="systemMessage">The stranger left.</div>';
+});
