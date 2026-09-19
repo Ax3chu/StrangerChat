@@ -10,7 +10,7 @@ const path = require("path");
 
 app.use(express.static(path.join(__dirname, "public")));;
 app.get("/", (req, res) => {
-    res.send("StrangerChat server is working!");
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 let waitingUser = null;
 
