@@ -70,36 +70,95 @@ button {
 
 /* CHAT */
 
-#chatScreen {
-    display: none;
-    height: 100vh;
-    flex-direction: column;
+/* =================================
+   MOBILE CHAT FIX
+================================= */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
 }
 
+body {
+    min-height: 100dvh;
+}
 
-.chatHeader {
-    height: 65px;
-    padding: 10px 15px;
-    border-bottom: 1px solid #ddd;
+/* Chat screen */
+
+#chatScreen {
+    width: 100%;
+    height: 100dvh;
+    height: 100svh;
 
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+
+    overflow: hidden;
 }
 
-.chatHeader b {
-    font-size: 18px;
+/* Chat header / status */
+
+#status {
+    flex-shrink: 0;
 }
 
-.chatHeader small {
-    display: block;
-    color: #888;
-    margin-top: 4px;
+/* Messages area */
+
+#messages {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    -webkit-overflow-scrolling: touch;
+
+    padding-bottom: 10px;
 }
 
-.nextButton {
-    padding: 10px 16px;
-    background: #111827;
+/* Message input area */
+
+.chatInput,
+.inputArea,
+.messageInputArea {
+    flex-shrink: 0;
+
+    width: 100%;
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+
+    background: inherit;
+}
+
+/* Input */
+
+#messageInput {
+    min-width: 0;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    #chatScreen {
+        height: 100dvh;
+        max-height: 100dvh;
+    }
+
+    #messages {
+        padding: 10px;
+        padding-bottom: 15px;
+    }
+
+    #messageInput {
+        font-size: 16px;
+    }
+
 }
 
 
