@@ -1,1 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - StrangerChat</title>
 
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 22px;
+        }
+
+        .logout {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 25px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 6px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #6b7280;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .status {
+            margin-top: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .online {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>🛡️ StrangerChat Admin</h1>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="container">
+
+        <div class="welcome">
+            <h2>Dashboard</h2>
+            <p>Monitor your StrangerChat server.</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>🟢 Online Users</h3>
+                <div class="number" id="onlineUsers">0</div>
+            </div>
+
+            <div class="card">
+                <h3>⏳ Waiting Users</h3>
+                <div class="number" id="waitingUsers">0</div>
+            </div>
+
+            <div class="card">
+                <h3>💬 Active Chats</h3>
+                <div class="number" id="activeChats">0</div>
+            </div>
+
+        </div>
+
+        <div class="status">
+            <h3>Server Status</h3>
+            <br>
+            <p class="online">● Server Online</p>
+        </div>
+
+    </div>
+
+    <script>
+        function logout() {
+            alert("Admin logout will be connected later.");
+        }
+    </script>
+
+</body>
+</html>
