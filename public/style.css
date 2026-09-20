@@ -1,5 +1,6 @@
+```css
 /* =========================================
-   GLOBAL
+   RESET
 ========================================= */
 
 * {
@@ -8,15 +9,16 @@
 
 html,
 body {
-    width: 100%;
-    min-height: 100%;
     margin: 0;
     padding: 0;
+    width: 100%;
+    min-height: 100%;
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     background: #eef0f5;
+    color: #111827;
 }
 
 
@@ -27,93 +29,89 @@ body {
 .app {
     width: 100%;
     max-width: 500px;
-
     min-height: 100vh;
-
     margin: 0 auto;
-
-    background: white;
+    background: #ffffff;
 }
 
 
 /* =========================================
-   HOME SCREEN
+   LOGIN / HOME
 ========================================= */
 
 #homeScreen {
-
-    width: 100%;
-
     min-height: 100vh;
+    width: 100%;
 
     padding: 30px 20px;
 
     text-align: center;
 
+    background: #ffffff;
+
     overflow-y: auto;
 }
 
 
-/* =========================================
-   LOGO
-========================================= */
+/* Logo */
 
 .logo {
-
     margin-top: 100px;
 
     font-size: 38px;
-
-    font-weight: bold;
+    font-weight: 700;
 
     color: #4f46e5;
 }
 
 
-/* =========================================
-   SUBTITLE
-========================================= */
+/* Subtitle */
 
 .subtitle {
-
-    color: #777;
-
+    margin-top: 10px;
     margin-bottom: 40px;
+
+    color: #777777;
+
+    font-size: 15px;
 }
 
 
-/* =========================================
-   HOME INPUT
-========================================= */
+/* Nickname */
 
-#homeScreen input {
-
+#nickname {
     width: 100%;
 
-    padding: 15px;
+    height: 52px;
 
-    border: 1px solid #ddd;
+    padding: 0 16px;
+
+    border: 1px solid #d9dce3;
 
     border-radius: 12px;
 
-    font-size: 16px;
-
     outline: none;
 
-    background: white;
+    background: #ffffff;
+
+    font-size: 16px;
+
+    color: #111827;
 }
 
-#homeScreen input:focus {
-
+#nickname:focus {
     border-color: #4f46e5;
 }
 
 
-/* =========================================
-   BUTTONS
-========================================= */
+/* Start button */
 
-button {
+#homeScreen button {
+    width: 100%;
+
+    height: 52px;
+
+    margin-top: 15px;
 
     border: none;
 
@@ -125,44 +123,26 @@ button {
 
     font-size: 16px;
 
-    font-weight: bold;
-
-    padding: 15px;
+    font-weight: 700;
 
     cursor: pointer;
-
-    -webkit-tap-highlight-color: transparent;
 }
 
-button:active {
-
-    transform: scale(0.97);
+#homeScreen button:active {
+    transform: scale(0.98);
 }
 
 
-/* =========================================
-   HOME BUTTON
-========================================= */
-
-#homeScreen button {
-
-    width: 100%;
-
-    margin-top: 15px;
-}
-
-
-/* =========================================
-   INFO TEXT
-========================================= */
+/* Info */
 
 .info {
+    margin-top: 25px;
 
-    color: #999;
+    color: #999999;
 
     font-size: 13px;
 
-    margin-top: 25px;
+    line-height: 1.5;
 }
 
 
@@ -171,12 +151,15 @@ button:active {
 ========================================= */
 
 #chatScreen {
-
     position: fixed;
 
-    inset: 0;
+    top: 0;
+    left: 50%;
+
+    transform: translateX(-50%);
 
     width: 100%;
+    max-width: 500px;
 
     height: 100dvh;
 
@@ -186,40 +169,163 @@ button:active {
 
     overflow: hidden;
 
-    background: white;
+    background: #efeae2;
+
+    z-index: 100;
 }
 
 
 /* =========================================
-   CHAT STATUS
+   WHATSAPP-STYLE HEADER
 ========================================= */
 
-#status {
-
+.chatHeader {
     flex-shrink: 0;
 
     width: 100%;
 
-    padding: 14px 15px;
+    min-height: 64px;
 
-    text-align: center;
+    display: flex;
 
-    background: white;
+    align-items: center;
 
-    border-bottom: 1px solid #e5e7eb;
+    gap: 10px;
 
-    color: #555;
+    padding: 8px 10px;
 
-    font-size: 14px;
+    background: #075e54;
+
+    color: white;
+
+    padding-top:
+        calc(
+            8px + env(safe-area-inset-top)
+        );
+}
+
+
+/* Back button */
+
+.backButton {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 27px;
+
+    line-height: 1;
+
+    color: white;
+}
+
+
+/* Avatar */
+
+.strangerAvatar {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #d9fdd3;
+
+    font-size: 23px;
+}
+
+
+/* User information */
+
+.chatUserInfo {
+    min-width: 0;
+
+    flex: 1;
+
+    overflow: hidden;
+}
+
+
+/* Stranger name */
+
+.chatUserName {
+    font-size: 16px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* Status */
+
+.chatStatus {
+    margin-top: 2px;
+
+    color: rgba(255, 255, 255, 0.8);
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* Next button */
+
+.nextButton {
+    flex-shrink: 0;
+
+    min-width: 55px;
+
+    height: 38px;
+
+    padding: 0 10px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.16);
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.nextButton:active {
+    background: rgba(255, 255, 255, 0.28);
 }
 
 
 /* =========================================
-   MESSAGES
+   CHAT MESSAGES
 ========================================= */
 
 #messages {
-
     flex: 1;
 
     min-height: 0;
@@ -227,16 +333,28 @@ button:active {
     width: 100%;
 
     overflow-y: auto;
-
     overflow-x: hidden;
 
-    padding: 15px;
-
-    background: #f7f8fa;
+    padding: 12px 10px 14px;
 
     -webkit-overflow-scrolling: touch;
 
     overscroll-behavior: contain;
+
+    background-color: #efeae2;
+
+    /*
+       Subtle WhatsApp-like background
+    */
+
+    background-image:
+        radial-gradient(
+            circle at 20px 20px,
+            rgba(255,255,255,0.18) 2px,
+            transparent 2px
+        );
+
+    background-size: 40px 40px;
 }
 
 
@@ -245,16 +363,26 @@ button:active {
 ========================================= */
 
 .systemMessage {
+    width: fit-content;
 
-    width: 100%;
+    max-width: 85%;
+
+    margin: 12px auto;
+
+    padding: 7px 12px;
+
+    border-radius: 8px;
+
+    background: #fff3c4;
+
+    color: #667085;
+
+    font-size: 12px;
 
     text-align: center;
 
-    color: #999;
-
-    font-size: 13px;
-
-    margin: 20px 0;
+    box-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
 
@@ -263,32 +391,37 @@ button:active {
 ========================================= */
 
 .myMessage {
-
     width: fit-content;
 
-    max-width: 75%;
+    max-width: 82%;
 
     margin-left: auto;
-
     margin-right: 0;
 
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 
-    padding: 11px 15px;
-
-    background: #4f46e5;
-
-    color: white;
+    padding: 8px 10px 8px 12px;
 
     border-radius:
-        18px
-        18px
-        4px
-        18px;
+        8px
+        8px
+        2px
+        8px;
+
+    background: #d9fdd3;
+
+    color: #111827;
+
+    font-size: 15px;
+
+    line-height: 1.35;
 
     word-break: break-word;
 
     overflow-wrap: anywhere;
+
+    box-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.08);
 }
 
 
@@ -297,32 +430,37 @@ button:active {
 ========================================= */
 
 .theirMessage {
-
     width: fit-content;
 
-    max-width: 75%;
+    max-width: 82%;
 
     margin-left: 0;
-
     margin-right: auto;
 
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 
-    padding: 11px 15px;
+    padding: 8px 10px 8px 12px;
 
-    background: #e5e7eb;
+    border-radius:
+        8px
+        8px
+        8px
+        2px;
+
+    background: #ffffff;
 
     color: #111827;
 
-    border-radius:
-        18px
-        18px
-        18px
-        4px;
+    font-size: 15px;
+
+    line-height: 1.35;
 
     word-break: break-word;
 
     overflow-wrap: anywhere;
+
+    box-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.08);
 }
 
 
@@ -331,10 +469,9 @@ button:active {
 ========================================= */
 
 .messageArea {
+    flex-shrink: 0;
 
     width: 100%;
-
-    flex-shrink: 0;
 
     display: flex;
 
@@ -342,17 +479,17 @@ button:active {
 
     gap: 8px;
 
-    padding: 10px;
-
-    background: white;
-
-    border-top: 1px solid #ddd;
+    padding:
+        7px 8px;
 
     padding-bottom:
         calc(
-            10px +
-            env(safe-area-inset-bottom)
+            7px + env(safe-area-inset-bottom)
         );
+
+    background: #f0f2f5;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 
@@ -360,30 +497,41 @@ button:active {
    MESSAGE INPUT
 ========================================= */
 
-.messageArea input {
-
+#messageInput {
     flex: 1;
 
     min-width: 0;
 
-    height: 48px;
+    height: 46px;
 
-    padding: 0 15px;
+    padding:
+        0 16px;
 
-    border: 1px solid #ddd;
-
-    border-radius: 24px;
-
-    font-size: 16px;
+    border: none;
 
     outline: none;
 
-    background: #f8fafc;
+    border-radius: 24px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 16px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    -webkit-appearance: none;
+
+    appearance: none;
 }
 
-.messageArea input:focus {
+#messageInput::placeholder {
+    color: #8a8a8a;
+}
 
-    border-color: #4f46e5;
+#messageInput:focus {
+    outline: none;
 }
 
 
@@ -391,23 +539,36 @@ button:active {
    SEND BUTTON
 ========================================= */
 
-.messageArea button {
+.sendButton {
+    width: 46px;
+    height: 46px;
 
     flex-shrink: 0;
 
-    width: 48px;
-
-    height: 48px;
-
     padding: 0;
+
+    border: none;
 
     border-radius: 50%;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
+
+    background: #075e54;
+
+    color: white;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+.sendButton:active {
+    transform: scale(0.94);
 }
 
 
@@ -418,119 +579,140 @@ button:active {
 @media (max-width: 600px) {
 
     body {
-
-        background: white;
+        background: #ffffff;
     }
 
     .app {
-
         width: 100%;
-
         max-width: none;
-
-        min-height: 100vh;
     }
 
     #homeScreen {
-
-        min-height: 100vh;
-
-        padding:
-            25px
-            20px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     .logo {
-
         margin-top: 80px;
-
         font-size: 34px;
     }
 
     .subtitle {
-
-        margin-bottom: 30px;
+        margin-bottom: 32px;
     }
 
-    #status {
+    #chatScreen {
+        max-width: none;
 
-        padding: 12px;
+        /*
+           Important for Android keyboard
+        */
 
-        font-size: 13px;
+        height: 100dvh;
+    }
+
+    .chatHeader {
+        min-height: 60px;
     }
 
     #messages {
-
-        padding: 12px;
+        padding-left: 8px;
+        padding-right: 8px;
     }
 
     .myMessage,
     .theirMessage {
+        max-width: 84%;
+    }
 
-        max-width: 82%;
+}
+
+
+/* =========================================
+   SMALL PHONES
+========================================= */
+
+@media (max-width: 360px) {
+
+    .chatUserName {
+        font-size: 15px;
+    }
+
+    .chatStatus {
+        font-size: 11px;
+    }
+
+    .nextButton {
+        min-width: 48px;
+
+        padding-left: 7px;
+        padding-right: 7px;
+
+        font-size: 12px;
+    }
+
+    .myMessage,
+    .theirMessage {
+        max-width: 88%;
+    }
+
+}
+
+
+/* =========================================
+   LANDSCAPE PHONES
+========================================= */
+
+@media (max-height: 500px) and (orientation: landscape) {
+
+    .chatHeader {
+        min-height: 52px;
+    }
+
+    .strangerAvatar {
+        width: 36px;
+        height: 36px;
     }
 
     .messageArea {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
 
-        padding: 8px;
-
-        padding-bottom:
-            calc(
-                8px +
-                env(safe-area-inset-bottom)
-            );
+    #messageInput,
+    .sendButton {
+        height: 40px;
     }
 
 }
 
 
 /* =========================================
-   SMALL HEIGHT PHONES
+   REMOVE MOBILE TAP FLASH
 ========================================= */
 
-@media (max-height: 650px) {
-
-    .logo {
-
-        margin-top: 40px;
-
-        font-size: 32px;
-    }
-
-    .subtitle {
-
-        margin-bottom: 25px;
-    }
-
-}
-
-
-/* =========================================
-   INPUT / BUTTON MOBILE FIX
-========================================= */
-
+button,
 input {
-
-    -webkit-appearance: none;
-
-    appearance: none;
-}
-
-
-/* Prevent Android browser from zooming */
-
-.messageArea input,
-#homeScreen input {
-
-    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
 /* =========================================
-   SMOOTH SCROLL
+   REDUCED MOTION
 ========================================= */
 
-#messages {
+@media (prefers-reduced-motion: reduce) {
 
-    scroll-behavior: smooth;
+    * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+    }
+
 }
+```
+
+This is the **complete CSS replacement** for the new `index.html`.
+
+One important thing: the Android keyboard itself is controlled by the browser/OS, so we can't force it to behave identically on every phone. The layout above uses the mobile viewport and keeps the input area as the bottom part of the chat while the **message list is the scrolling area**.
+
+After replacing it, **save → deploy on Render → open the site and test Start Chat**.
