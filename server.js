@@ -252,7 +252,20 @@ io.on("connection", (socket) => {
 
     socket.on("joinChat", (nickname) => {
 
-    socket.nickname = nickname || "Anonymous";
+    nickname = String(nickname || "").trim();
+
+    if (!nickname) {
+        nickname = "Anonymous";
+    }
+
+    socket.nickname = nickname;
+
+    console.log(
+        "User joined:",
+        socket.id,
+        "Nickname:",
+        socket.nickname
+    );
 
         if (
             waitingUser &&
