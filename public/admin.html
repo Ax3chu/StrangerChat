@@ -663,40 +663,39 @@ function updateUsers(users) {
 
         row.innerHTML = `
 
-            <td>
-    <strong>${escapeHtml(user.nickname)}</strong>
-    <br>
-    <small>#${user.id}</small>
-</td>
+    <td>
+        <strong>
+            ${escapeHtml(user.nickname || "Anonymous")}
+        </strong>
 
-            <td class="${statusClass}">
-                ${statusText}
-            </td>
+        <br>
 
-            <td>
-                ${connectedText}
-            </td>
+        <small>
+            #${user.id}
+        </small>
+    </td>
 
-            <td>
+    <td class="${statusClass}">
+        ${statusText}
+    </td>
 
-                <button
-                    class="disconnect"
-                    onclick="disconnectUser('${user.socketId}')">
+    <td>
+        ${connectedText}
+    </td>
 
-                    🔴 Disconnect
+    <td>
 
-                </button>
+        <button
+            class="disconnect"
+            onclick="disconnectUser('${user.socketId}')">
 
-            </td>
+            🔴 Disconnect
 
-        `;
+        </button>
 
+    </td>
 
-        table.appendChild(row);
-
-    });
-
-}
+`;
 
 
 
