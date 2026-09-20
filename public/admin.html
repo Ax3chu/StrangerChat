@@ -556,7 +556,14 @@ async function loadStats() {
 // =========================
 // LIVE USER TABLE
 // =========================
+ function escapeHtml(text) {
 
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+      }
 function updateUsers(users) {
 
     const table =
@@ -657,8 +664,10 @@ function updateUsers(users) {
         row.innerHTML = `
 
             <td>
-                #${user.id}
-            </td>
+    <strong>${escapeHtml(user.nickname)}</strong>
+    <br>
+    <small>#${user.id}</small>
+</td>
 
             <td class="${statusClass}">
                 ${statusText}
