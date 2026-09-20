@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -135,7 +135,7 @@ input {
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 600px;
+    min-width: 650px;
 }
 
 th,
@@ -147,6 +147,14 @@ td {
 
 th {
     color: #94a3b8;
+}
+
+td {
+    vertical-align: middle;
+}
+
+td small {
+    color: #64748b;
 }
 
 .waiting {
@@ -176,6 +184,45 @@ th {
     padding: 25px;
 }
 
+.refresh {
+    background: #2563eb;
+    color: white;
+}
+
+.refresh:hover {
+    background: #1d4ed8;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding: 12px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card-value {
+        font-size: 25px;
+    }
+
+    .users-box {
+        padding: 12px;
+    }
+
+}
+
 </style>
 
 </head>
@@ -196,12 +243,14 @@ th {
     <input
         id="username"
         type="text"
-        placeholder="Username">
+        placeholder="Username"
+        autocomplete="username">
 
     <input
         id="password"
         type="password"
-        placeholder="Password">
+        placeholder="Password"
+        autocomplete="current-password">
 
     <button
         class="login-btn"
@@ -228,6 +277,8 @@ th {
 
 <div class="container">
 
+
+<!-- HEADER -->
 
 <div class="header">
 
@@ -323,17 +374,32 @@ th {
 
 <div class="users-box">
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
 
-    <h2 style="margin:0;">👥 Live Users</h2>
+<div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+">
+
+
+    <h2 style="margin:0;">
+        👥 Live Users
+    </h2>
+
 
     <button
-        onclick="loadStats()"
-        style="background:#2563eb; color:white;">
+        class="refresh"
+        onclick="loadStats()">
+
         🔄 Refresh
+
     </button>
 
+
 </div>
+
+
 
 <table>
 
@@ -342,8 +408,11 @@ th {
 <tr>
 
 <th>Nickname</th>
+
 <th>Status</th>
+
 <th>Connected</th>
+
 <th>Disconnect</th>
 
 </tr>
@@ -368,6 +437,7 @@ th {
 
 </table>
 
+
 </div>
 
 
@@ -379,8 +449,14 @@ th {
 
 <script>
 
+
+// =========================
+// ADMIN PATH
+// =========================
+
 const ADMIN_PATH =
     "/Ax3chu-panel-7x9k";
+
 
 
 // =========================
@@ -392,7 +468,8 @@ async function login() {
     const username =
         document.getElementById(
             "username"
-        ).value;
+        ).value.trim();
+
 
     const password =
         document.getElementById(
@@ -400,44 +477,64 @@ async function login() {
         ).value;
 
 
-    const response =
-        await fetch(
-            ADMIN_PATH + "/login",
-            {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    username,
-                    password
-                })
-
-            }
+    const errorBox =
+        document.getElementById(
+            "loginError"
         );
 
 
-    const data =
-        await response.json();
+    errorBox.textContent = "";
 
 
-    if (data.success) {
+    try {
 
-        showDashboard();
+        const response =
+            await fetch(
+                ADMIN_PATH + "/login",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        username,
+                        password
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (data.success) {
+
+            showDashboard();
+
+        }
+
+        else {
+
+            errorBox.textContent =
+                data.message ||
+                "Login failed";
+
+        }
 
     }
 
-    else {
+    catch (error) {
 
-        document.getElementById(
-            "loginError"
-        ).textContent =
-            data.message ||
-            "Login failed";
+        console.error(error);
+
+        errorBox.textContent =
+            "Server connection error";
 
     }
 
@@ -451,18 +548,29 @@ async function login() {
 
 async function checkAuth() {
 
-    const response =
-        await fetch(
-            ADMIN_PATH + "/auth"
-        );
+    try {
 
-    const data =
-        await response.json();
+        const response =
+            await fetch(
+                ADMIN_PATH + "/auth"
+            );
 
 
-    if (data.loggedIn) {
+        const data =
+            await response.json();
 
-        showDashboard();
+
+        if (data.loggedIn) {
+
+            showDashboard();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
 
     }
 
@@ -508,7 +616,15 @@ async function loadStats() {
 
         if (response.status === 401) {
 
-            location.reload();
+            document.getElementById(
+                "dashboard"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "loginScreen"
+            ).style.display = "block";
+
 
             return;
 
@@ -522,19 +638,19 @@ async function loadStats() {
         document.getElementById(
             "onlineUsers"
         ).textContent =
-            data.onlineUsers;
+            data.onlineUsers || 0;
 
 
         document.getElementById(
             "waitingUsers"
         ).textContent =
-            data.waitingUsers;
+            data.waitingUsers || 0;
 
 
         document.getElementById(
             "activeChats"
         ).textContent =
-            data.activeChats;
+            data.activeChats || 0;
 
 
         updateUsers(
@@ -545,7 +661,10 @@ async function loadStats() {
 
     catch (error) {
 
-        console.log(error);
+        console.error(
+            "Stats error:",
+            error
+        );
 
     }
 
@@ -554,16 +673,29 @@ async function loadStats() {
 
 
 // =========================
-// LIVE USER TABLE
+// ESCAPE HTML
 // =========================
- function escapeHtml(text) {
 
-    const div = document.createElement("div");
+function escapeHtml(text) {
 
-    div.textContent = text;
+    const div =
+        document.createElement("div");
+
+
+    div.textContent =
+        text;
+
 
     return div.innerHTML;
-      }
+
+}
+
+
+
+// =========================
+// LIVE USERS TABLE
+// =========================
+
 function updateUsers(users) {
 
     const table =
@@ -572,13 +704,16 @@ function updateUsers(users) {
         );
 
 
-    if (users.length === 0) {
+    // No users
+
+    if (!users || users.length === 0) {
 
         table.innerHTML = `
 
             <tr>
 
-                <td colspan="4"
+                <td
+                    colspan="4"
                     class="no-users">
 
                     No users connected
@@ -594,26 +729,39 @@ function updateUsers(users) {
     }
 
 
+    // Clear old rows
+
     table.innerHTML = "";
 
 
+    // Add every user
+
     users.forEach(user => {
+
 
         const row =
             document.createElement("tr");
 
 
+        // =========================
+        // STATUS
+        // =========================
+
         let statusClass =
             "online";
+
 
         let statusText =
             "🔵 Online";
 
 
-        if (user.status === "Waiting") {
+        if (
+            user.status === "Waiting"
+        ) {
 
             statusClass =
                 "waiting";
+
 
             statusText =
                 "🟡 Waiting";
@@ -621,10 +769,13 @@ function updateUsers(users) {
         }
 
 
-        if (user.status === "Chatting") {
+        if (
+            user.status === "Chatting"
+        ) {
 
             statusClass =
                 "chatting";
+
 
             statusText =
                 "🟢 Chatting";
@@ -632,17 +783,31 @@ function updateUsers(users) {
         }
 
 
+
+        // =========================
+        // CONNECTED TIME
+        // =========================
+
         const connectedSeconds =
-            Math.floor(
-                (Date.now() -
-                user.connectedAt) / 1000
+            Math.max(
+                0,
+                Math.floor(
+                    (
+                        Date.now() -
+                        Number(
+                            user.connectedAt
+                        )
+                    ) / 1000
+                )
             );
 
 
         let connectedText;
 
 
-        if (connectedSeconds < 60) {
+        if (
+            connectedSeconds < 60
+        ) {
 
             connectedText =
                 connectedSeconds +
@@ -650,7 +815,9 @@ function updateUsers(users) {
 
         }
 
-        else {
+        else if (
+            connectedSeconds < 3600
+        ) {
 
             connectedText =
                 Math.floor(
@@ -660,51 +827,93 @@ function updateUsers(users) {
 
         }
 
+        else {
+
+            connectedText =
+                Math.floor(
+                    connectedSeconds / 3600
+                ) +
+                " hr";
+
+        }
+
+
+
+        // =========================
+        // USER ROW
+        // =========================
 
         row.innerHTML = `
 
-    <td>
-        <strong>
-            ${escapeHtml(user.nickname || "Anonymous")}
-        </strong>
+            <td>
 
-        <br>
+                <strong>
+                    ${escapeHtml(
+                        user.nickname ||
+                        "Anonymous"
+                    )}
+                </strong>
 
-        <small>
-            #${user.id}
-        </small>
-    </td>
+                <br>
 
-    <td class="${statusClass}">
-        ${statusText}
-    </td>
+                <small>
+                    #${escapeHtml(
+                        user.id ||
+                        "unknown"
+                    )}
+                </small>
 
-    <td>
-        ${connectedText}
-    </td>
+            </td>
 
-    <td>
 
-        <button
-            class="disconnect"
-            onclick="disconnectUser('${user.socketId}')">
+            <td
+                class="${statusClass}">
 
-            🔴 Disconnect
+                ${statusText}
 
-        </button>
+            </td>
 
-    </td>
 
-`;
-              });
+            <td>
+
+                ${connectedText}
+
+            </td>
+
+
+            <td>
+
+                <button
+                    class="disconnect"
+                    onclick="disconnectUser('${escapeHtml(user.socketId)}')">
+
+                    🔴 Disconnect
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        // IMPORTANT
+        // Put row into table
+
+        table.appendChild(row);
+
+    });
+
 }
+
 
 
 // =========================
 // DISCONNECT USER
 // =========================
 
-async function disconnectUser(socketId) {
+async function disconnectUser(
+    socketId
+) {
 
     const confirmDisconnect =
         confirm(
@@ -713,48 +922,66 @@ async function disconnectUser(socketId) {
 
 
     if (!confirmDisconnect) {
+
         return;
+
     }
 
 
-    const response =
-        await fetch(
-            ADMIN_PATH +
-            "/disconnect",
-            {
+    try {
 
-                method: "POST",
+        const response =
+            await fetch(
+                ADMIN_PATH +
+                "/disconnect",
+                {
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+                    method: "POST",
 
-                body: JSON.stringify({
-                    socketId
-                })
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-            }
-        );
+                    body: JSON.stringify({
+                        socketId
+                    })
 
-
-    const data =
-        await response.json();
+                }
+            );
 
 
-    if (!data.success) {
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            alert(
+                data.error ||
+                "Failed to disconnect user"
+            );
+
+            return;
+
+        }
+
+
+        // Refresh manually after disconnect
+
+        loadStats();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
 
         alert(
-            data.error ||
-            "Failed to disconnect user"
+            "Server connection error"
         );
 
-        return;
-
     }
-
-
-    loadStats();
 
 }
 
@@ -766,12 +993,22 @@ async function disconnectUser(socketId) {
 
 async function logout() {
 
-    await fetch(
-        ADMIN_PATH + "/logout",
-        {
-            method: "POST"
-        }
-    );
+    try {
+
+        await fetch(
+            ADMIN_PATH + "/logout",
+            {
+                method: "POST"
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+    }
 
 
     location.reload();
@@ -781,15 +1018,11 @@ async function logout() {
 
 
 // =========================
-// AUTO REFRESH
+// START
 // =========================
 
-
-
-
-// Start
-
 checkAuth();
+
 
 </script>
 
