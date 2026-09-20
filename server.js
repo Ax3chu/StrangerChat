@@ -330,37 +330,97 @@ io.on("connection", (socket) => {
     // ===============================
     // NEXT
     // ===============================
+      // ===============================
+// NEXT
+// ===============================
 
-    socket.on("next", () => {
+socket.on("next", () => {
 
-        const partner = socket.partner;
+    const oldPartner = socket.partner;
 
-        if (partner) {
 
-            io.to(partner).emit(
-                "partnerLeft"
-            );
+    // Tell the old partner that this chat ended
+    if (oldPartner) {
 
-            const partnerSocket =
-                io.sockets.sockets.get(partner);
+        io.to(oldPartner).emit("partnerLeft");
 
-            if (partnerSocket) {
+        const oldPartnerSocket =
+            io.sockets.sockets.get(oldPartner);
 
-                partnerSocket.partner = null;
+        if (oldPartnerSocket) {
 
-            }
+            oldPartnerSocket.partner = null;
 
         }
 
-        socket.partner = null;
+    }
 
+
+    // Remove current partner
+    socket.partner = null;
+
+
+    // Look for another available user
+    let newPartner = null;
+
+    for (const [id, user] of io.sockets.sockets) {
+
+        // Don't match with yourself
+        if (id === socket.id) {
+            continue;
+        }
+
+        // Don't match with the previous stranger
+        if (id === oldPartner) {
+            continue;
+        }
+
+        // User must not already be chatting
+        if (user.partner) {
+            continue;
+        }
+
+        // Don't take the user who is already waiting
+        if (waitingUser === id) {
+            continue;
+        }
+
+        newPartner = user;
+
+        break;
+    }
+
+
+    // If another available user exists
+    if (newPartner) {
+
+        socket.partner = newPartner.id;
+
+        newPartner.partner = socket.id;
+
+        waitingUser = null;
+
+
+        io.to(socket.id).emit("matched");
+
+        io.to(newPartner.id).emit("matched");
+
+    }
+
+    else {
+
+        // No available stranger yet
         waitingUser = socket.id;
 
         socket.emit("waiting");
 
-        sendStats();
+    }
 
-    });
+
+    sendStats();
+
+});
+    
 
 
     // ===============================
