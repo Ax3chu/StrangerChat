@@ -172,9 +172,13 @@ function getLiveUsers() {
 
             socketId: socket.id,
 
+            nickname:
+                socket.nickname || "Anonymous",
+
             status: status,
 
-            connectedAt: socket.connectedAt || Date.now()
+            connectedAt:
+                socket.connectedAt || Date.now()
 
         });
 
