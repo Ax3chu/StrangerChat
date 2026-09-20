@@ -246,7 +246,9 @@ io.on("connection", (socket) => {
     // JOIN CHAT
     // ===============================
 
-    socket.on("joinChat", () => {
+    socket.on("joinChat", (nickname) => {
+
+    socket.nickname = nickname || "Anonymous";
 
         if (
             waitingUser &&
