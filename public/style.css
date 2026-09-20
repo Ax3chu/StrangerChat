@@ -1,9 +1,15 @@
+html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
     background: #eef0f5;
 }
@@ -16,6 +22,8 @@ body {
     margin: auto;
     background: white;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -74,9 +82,9 @@ button {
 
 #chatScreen {
     display: none;
-    height: 100vh;
-    height: 100dvh;
+    height: 100%;
     flex-direction: column;
+    overflow: hidden;
 }
 
 
