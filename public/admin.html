@@ -323,7 +323,17 @@ th {
 
 <div class="users-box">
 
-<h2>👥 Live Users</h2>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+
+    <h2 style="margin:0;">👥 Live Users</h2>
+
+    <button
+        onclick="loadStats()"
+        style="background:#2563eb; color:white;">
+        🔄 Refresh
+    </button>
+
+</div>
 
 <table>
 
@@ -768,10 +778,7 @@ async function logout() {
 // AUTO REFRESH
 // =========================
 
-setInterval(
-    loadStats,
-    2000
-);
+
 
 
 // Start
