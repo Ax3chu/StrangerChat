@@ -1,5 +1,4 @@
-
-        const express = require("express");
+const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const path = require("path");
@@ -10,7 +9,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const ADMIN_USERNAME = "Ax3chu";
-const ADMIN_PASSWORD = "AchuthrajAx3chu@123";
+const ADMIN_PASSWORD = "Ax3chu@#123";
 
 const ADMIN_SECRET = "Ax3chu-panel-7x9k";
 
@@ -66,16 +65,10 @@ function getSession(req) {
 
 app.get("/" + ADMIN_SECRET, (req, res) => {
 
-    if (!getSession(req)) {
-
-        return res.sendFile(
-            path.join(__dirname, "public", "admin.html")
-        );
-    }
-
     res.sendFile(
         path.join(__dirname, "public", "admin.html")
     );
+
 });
 
 
@@ -153,107 +146,46 @@ app.get("/" + ADMIN_SECRET + "/auth", (req, res) => {
 
 let waitingUser = null;
 
-io.on("connection", (socket) => {
 
-    console.log("User connected:", socket.id);
+// ===============================
+// CREATE LIVE USER LIST
+// ===============================
 
+function getLiveUsers() {
 
-    socket.on("joinChat", () => {
+    const users = [];
 
-        if (waitingUser && waitingUser !== socket.id) {
+    io.sockets.sockets.forEach((socket) => {
 
-            const stranger = waitingUser;
-
-            waitingUser = null;
-
-            socket.partner = stranger;
-
-            const strangerSocket =
-                io.sockets.sockets.get(stranger);
-
-            if (strangerSocket) {
-                strangerSocket.partner = socket.id;
-            }
-
-            io.to(socket.id).emit("matched");
-            io.to(stranger).emit("matched");
-
-        } else {
-
-            waitingUser = socket.id;
-
-            socket.emit("waiting");
-        }
-
-        sendStats();
-    });
-
-
-    socket.on("message", (message) => {
-
-        const partner = socket.partner;
-
-        if (partner) {
-            io.to(partner).emit("message", message);
-        }
-    });
-
-
-    socket.on("next", () => {
-
-        const partner = socket.partner;
-
-        if (partner) {
-
-            io.to(partner).emit("partnerLeft");
-
-            const partnerSocket =
-                io.sockets.sockets.get(partner);
-
-            if (partnerSocket) {
-                partnerSocket.partner = null;
-            }
-        }
-
-        socket.partner = null;
-
-        waitingUser = socket.id;
-
-        socket.emit("waiting");
-
-        sendStats();
-    });
-
-
-    socket.on("disconnect", () => {
+        let status = "Online";
 
         if (socket.partner) {
-
-            io.to(socket.partner)
-                .emit("partnerLeft");
-
-            const partnerSocket =
-                io.sockets.sockets.get(socket.partner);
-
-            if (partnerSocket) {
-                partnerSocket.partner = null;
-            }
+            status = "Chatting";
+        }
+        else if (waitingUser === socket.id) {
+            status = "Waiting";
         }
 
-        if (waitingUser === socket.id) {
-            waitingUser = null;
-        }
+        users.push({
 
-        console.log("User disconnected:", socket.id);
+            id: socket.id.substring(0, 6),
 
-        sendStats();
+            socketId: socket.id,
+
+            status: status,
+
+            connectedAt: socket.connectedAt || Date.now()
+
+        });
+
     });
 
-});
+    return users;
+}
 
 
 // ===============================
-// ADMIN STATISTICS
+// SEND ADMIN STATS
 // ===============================
 
 function getStats() {
@@ -278,44 +210,310 @@ function getStats() {
         Math.floor(activeChats / 2);
 
     return {
+
         onlineUsers,
+
         waitingUsers,
-        activeChats
+
+        activeChats,
+
+        users: getLiveUsers()
+
     };
+
 }
 
 
 function sendStats() {
 
     io.emit("adminStats", getStats());
+
 }
 
 
-// Protected statistics endpoint
+// ===============================
+// SOCKET CONNECTION
+// ===============================
 
-app.get("/" + ADMIN_SECRET + "/stats", (req, res) => {
+io.on("connection", (socket) => {
 
-    if (!getSession(req)) {
+    console.log("User connected:", socket.id);
 
-        return res.status(401).json({
-            error: "Unauthorized"
-        });
-    }
+    socket.connectedAt = Date.now();
 
-    res.json(getStats());
+
+    // ===============================
+    // JOIN CHAT
+    // ===============================
+
+    socket.on("joinChat", () => {
+
+        if (
+            waitingUser &&
+            waitingUser !== socket.id
+        ) {
+
+            const stranger = waitingUser;
+
+            waitingUser = null;
+
+            socket.partner = stranger;
+
+            const strangerSocket =
+                io.sockets.sockets.get(stranger);
+
+            if (strangerSocket) {
+
+                strangerSocket.partner =
+                    socket.id;
+
+            }
+
+            io.to(socket.id).emit("matched");
+
+            io.to(stranger).emit("matched");
+
+        }
+
+        else {
+
+            waitingUser = socket.id;
+
+            socket.emit("waiting");
+
+        }
+
+        sendStats();
+
+    });
+
+
+    // ===============================
+    // MESSAGE
+    // ===============================
+
+    socket.on("message", (message) => {
+
+        const partner = socket.partner;
+
+        if (partner) {
+
+            io.to(partner).emit(
+                "message",
+                message
+            );
+
+        }
+
+    });
+
+
+    // ===============================
+    // NEXT
+    // ===============================
+
+    socket.on("next", () => {
+
+        const partner = socket.partner;
+
+        if (partner) {
+
+            io.to(partner).emit(
+                "partnerLeft"
+            );
+
+            const partnerSocket =
+                io.sockets.sockets.get(partner);
+
+            if (partnerSocket) {
+
+                partnerSocket.partner = null;
+
+            }
+
+        }
+
+        socket.partner = null;
+
+        waitingUser = socket.id;
+
+        socket.emit("waiting");
+
+        sendStats();
+
+    });
+
+
+    // ===============================
+    // DISCONNECT
+    // ===============================
+
+    socket.on("disconnect", () => {
+
+        if (socket.partner) {
+
+            io.to(socket.partner)
+                .emit("partnerLeft");
+
+            const partnerSocket =
+                io.sockets.sockets.get(
+                    socket.partner
+                );
+
+            if (partnerSocket) {
+
+                partnerSocket.partner = null;
+
+            }
+
+        }
+
+
+        if (waitingUser === socket.id) {
+
+            waitingUser = null;
+
+        }
+
+
+        console.log(
+            "User disconnected:",
+            socket.id
+        );
+
+        sendStats();
+
+    });
+
 });
+
+
+// ===============================
+// ADMIN STATISTICS API
+// ===============================
+
+app.get(
+    "/" + ADMIN_SECRET + "/stats",
+    (req, res) => {
+
+        if (!getSession(req)) {
+
+            return res.status(401).json({
+                error: "Unauthorized"
+            });
+
+        }
+
+        res.json(getStats());
+
+    }
+);
+
+
+// ===============================
+// ADMIN DISCONNECT USER
+// ===============================
+
+app.post(
+    "/" + ADMIN_SECRET + "/disconnect",
+    (req, res) => {
+
+        if (!getSession(req)) {
+
+            return res.status(401).json({
+                error: "Unauthorized"
+            });
+
+        }
+
+
+        const socketId =
+            req.body.socketId;
+
+        if (!socketId) {
+
+            return res.status(400).json({
+                error: "Socket ID required"
+            });
+
+        }
+
+
+        const target =
+            io.sockets.sockets.get(socketId);
+
+        if (!target) {
+
+            return res.status(404).json({
+                error: "User not found"
+            });
+
+        }
+
+
+        // Tell partner that user left
+
+        if (target.partner) {
+
+            const partnerId =
+                target.partner;
+
+            io.to(partnerId)
+                .emit("partnerLeft");
+
+            const partnerSocket =
+                io.sockets.sockets.get(
+                    partnerId
+                );
+
+            if (partnerSocket) {
+
+                partnerSocket.partner = null;
+
+            }
+
+        }
+
+
+        // Remove from waiting queue
+
+        if (waitingUser === target.id) {
+
+            waitingUser = null;
+
+        }
+
+
+        // Disconnect user
+
+        target.disconnect(true);
+
+
+        sendStats();
+
+
+        res.json({
+
+            success: true
+
+        });
+
+    }
+);
 
 
 // ===============================
 // SERVER
 // ===============================
 
-const PORT = process.env.PORT || 3000;
+const PORT =
+    process.env.PORT || 3000;
 
 server.listen(PORT, () => {
 
     console.log(
-        "StrangerChat server running on port " + PORT
+        "StrangerChat server running on port " +
+        PORT
     );
 
 });
