@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
 <title>StrangerChat Admin</title>
 
@@ -14,369 +14,458 @@ content="width=device-width, initial-scale=1.0">
 
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
 }
 
 body {
-    background: #f4f6f8;
-    color: #222;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
 }
 
-.login-container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.container {
+    max-width: 1100px;
+    margin: auto;
     padding: 20px;
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.logout {
+    background: #334155;
+    color: white;
+}
+
 .login-box {
-    background: white;
-    width: 100%;
-    max-width: 380px;
+    max-width: 400px;
+    margin: 100px auto;
+    background: #1e293b;
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.12);
 }
 
-.login-box h1 {
+.login-box h2 {
     text-align: center;
-    margin-bottom: 10px;
-}
-
-.login-box p {
-    text-align: center;
-    color: #777;
-    margin-bottom: 25px;
 }
 
 input {
     width: 100%;
     padding: 13px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
+    margin: 8px 0;
     border-radius: 8px;
-    font-size: 15px;
+    border: none;
 }
 
 .login-btn {
     width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 8px;
-    background: #111827;
+    background: #22c55e;
     color: white;
-    font-size: 16px;
-    cursor: pointer;
+    margin-top: 10px;
 }
 
 .error {
-    color: #dc2626;
+    color: #f87171;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .dashboard {
     display: none;
 }
 
-.header {
-    background: #111827;
-    color: white;
-    padding: 18px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+.cards {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
 
-.logout {
-    background: #ef4444;
-    color: white;
-    border: none;
-    padding: 9px 16px;
-    border-radius: 7px;
-    cursor: pointer;
-}
-
-.container {
-    padding: 25px;
-    max-width: 1100px;
-    margin: auto;
-}
-
-.welcome {
+    gap: 15px;
     margin-bottom: 25px;
 }
 
-.welcome h2 {
-    margin-bottom: 6px;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-}
-
 .card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 15px;
 }
 
-.card h3 {
-    color: #6b7280;
-    font-size: 15px;
-    margin-bottom: 12px;
+.card-title {
+    color: #94a3b8;
+    font-size: 14px;
 }
 
-.number {
+.card-value {
     font-size: 32px;
     font-weight: bold;
+    margin-top: 8px;
 }
 
 .status {
-    margin-top: 30px;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    color: #4ade80;
+}
+
+.users-box {
+    background: #1e293b;
+    border-radius: 15px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.users-box h2 {
+    margin-top: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th,
+td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+}
+
+th {
+    color: #94a3b8;
+}
+
+.waiting {
+    color: #facc15;
+}
+
+.chatting {
+    color: #4ade80;
 }
 
 .online {
-    color: #16a34a;
-    font-weight: bold;
+    color: #60a5fa;
 }
 
-@media (max-width: 700px) {
+.disconnect {
+    background: #ef4444;
+    color: white;
+}
 
-    .cards {
-        grid-template-columns: 1fr;
-    }
+.disconnect:hover {
+    background: #dc2626;
+}
 
-    .container {
-        padding: 15px;
-    }
-
+.no-users {
+    text-align: center;
+    color: #94a3b8;
+    padding: 25px;
 }
 
 </style>
 
 </head>
 
+
 <body>
 
 
+<!-- ========================= -->
 <!-- LOGIN -->
+<!-- ========================= -->
 
-<div class="login-container" id="loginScreen">
+<div id="loginScreen"
+     class="login-box">
 
-    <div class="login-box">
+    <h2>🛡️ StrangerChat Admin</h2>
 
-        <h1>🛡️ Admin</h1>
+    <input
+        id="username"
+        type="text"
+        placeholder="Username">
 
-        <p>StrangerChat Administration</p>
+    <input
+        id="password"
+        type="password"
+        placeholder="Password">
 
-        <input
-            type="text"
-            id="username"
-            placeholder="Username"
-        >
+    <button
+        class="login-btn"
+        onclick="login()">
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Password"
-        >
+        Login
 
-        <button
-            class="login-btn"
-            onclick="login()"
-        >
-            Login
-        </button>
+    </button>
 
-        <div
-            class="error"
-            id="error"
-        ></div>
-
+    <div id="loginError"
+         class="error">
     </div>
 
 </div>
 
 
+
+<!-- ========================= -->
 <!-- DASHBOARD -->
+<!-- ========================= -->
 
-<div class="dashboard" id="dashboard">
+<div id="dashboard"
+     class="dashboard">
 
-    <div class="header">
+<div class="container">
 
-        <h1>🛡️ StrangerChat Admin</h1>
 
-        <button
-            class="logout"
-            onclick="logout()"
-        >
-            Logout
-        </button>
+<div class="header">
 
+    <h1>🛡️ StrangerChat Admin</h1>
+
+    <button
+        class="logout"
+        onclick="logout()">
+
+        Logout
+
+    </button>
+
+</div>
+
+
+
+<!-- ========================= -->
+<!-- STAT CARDS -->
+<!-- ========================= -->
+
+<div class="cards">
+
+
+<div class="card">
+
+    <div class="card-title">
+        👥 Online Users
     </div>
 
+    <div id="onlineUsers"
+         class="card-value">
 
-    <div class="container">
-
-        <div class="welcome">
-
-            <h2>Dashboard</h2>
-
-            <p>
-                Live StrangerChat server statistics
-            </p>
-
-        </div>
-
-
-        <div class="cards">
-
-            <div class="card">
-
-                <h3>🟢 Online Users</h3>
-
-                <div
-                    class="number"
-                    id="onlineUsers"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <h3>⏳ Waiting Users</h3>
-
-                <div
-                    class="number"
-                    id="waitingUsers"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <h3>💬 Active Chats</h3>
-
-                <div
-                    class="number"
-                    id="activeChats"
-                >
-                    0
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="status">
-
-            <h3>Server Status</h3>
-
-            <br>
-
-            <p class="online">
-                ● Server Online
-            </p>
-
-        </div>
+        0
 
     </div>
 
 </div>
+
+
+<div class="card">
+
+    <div class="card-title">
+        🟡 Waiting Users
+    </div>
+
+    <div id="waitingUsers"
+         class="card-value">
+
+        0
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-title">
+        💬 Active Chats
+    </div>
+
+    <div id="activeChats"
+         class="card-value">
+
+        0
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-title">
+        Server
+    </div>
+
+    <div class="card-value status">
+        ● Online
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- ========================= -->
+<!-- LIVE USERS -->
+<!-- ========================= -->
+
+<div class="users-box">
+
+<h2>👥 Live Users</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>User ID</th>
+
+<th>Status</th>
+
+<th>Connected</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="usersTable">
+
+<tr>
+
+<td colspan="4"
+    class="no-users">
+
+    No users connected
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+
+</div>
+
+</div>
+
 
 
 <script>
 
-const ADMIN_PATH = "/Ax3chu-panel-7x9k";
+const ADMIN_PATH =
+    "/Ax3chu-panel-7x9k";
 
 
-// ===============================
+// =========================
 // LOGIN
-// ===============================
+// =========================
 
 async function login() {
 
     const username =
-        document.getElementById("username").value;
+        document.getElementById(
+            "username"
+        ).value;
 
     const password =
-        document.getElementById("password").value;
-
-    const error =
-        document.getElementById("error");
-
-
-    error.textContent = "";
+        document.getElementById(
+            "password"
+        ).value;
 
 
-    try {
+    const response =
+        await fetch(
+            ADMIN_PATH + "/login",
+            {
 
-        const response =
-            await fetch(
-                ADMIN_PATH + "/login",
-                {
-                    method: "POST",
+                method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
 
-                    body: JSON.stringify({
-                        username,
-                        password
-                    })
-                }
-            );
+                body: JSON.stringify({
+                    username,
+                    password
+                })
 
-
-        const data =
-            await response.json();
+            }
+        );
 
 
-        if (!response.ok) {
+    const data =
+        await response.json();
 
-            error.textContent =
-                data.message ||
-                "Login failed";
 
-            return;
-        }
-
+    if (data.success) {
 
         showDashboard();
 
-    } catch (err) {
+    }
 
-        error.textContent =
-            "Connection error";
+    else {
+
+        document.getElementById(
+            "loginError"
+        ).textContent =
+            data.message ||
+            "Login failed";
 
     }
 
 }
 
 
-// ===============================
+
+// =========================
+// CHECK LOGIN
+// =========================
+
+async function checkAuth() {
+
+    const response =
+        await fetch(
+            ADMIN_PATH + "/auth"
+        );
+
+    const data =
+        await response.json();
+
+
+    if (data.loggedIn) {
+
+        showDashboard();
+
+    }
+
+}
+
+
+
+// =========================
 // SHOW DASHBOARD
-// ===============================
+// =========================
 
 function showDashboard() {
 
@@ -392,14 +481,13 @@ function showDashboard() {
 
     loadStats();
 
-    setInterval(loadStats, 2000);
-
 }
 
 
-// ===============================
-// LOAD LIVE STATS
-// ===============================
+
+// =========================
+// LOAD STATS
+// =========================
 
 async function loadStats() {
 
@@ -411,8 +499,12 @@ async function loadStats() {
             );
 
 
-        if (!response.ok) {
+        if (response.status === 401) {
+
+            location.reload();
+
             return;
+
         }
 
 
@@ -438,21 +530,223 @@ async function loadStats() {
             data.activeChats;
 
 
-    } catch (err) {
-
-        console.log(
-            "Stats error:",
-            err
+        updateUsers(
+            data.users || []
         );
+
+    }
+
+    catch (error) {
+
+        console.log(error);
 
     }
 
 }
 
 
-// ===============================
+
+// =========================
+// LIVE USER TABLE
+// =========================
+
+function updateUsers(users) {
+
+    const table =
+        document.getElementById(
+            "usersTable"
+        );
+
+
+    if (users.length === 0) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="4"
+                    class="no-users">
+
+                    No users connected
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML = "";
+
+
+    users.forEach(user => {
+
+        const row =
+            document.createElement("tr");
+
+
+        let statusClass =
+            "online";
+
+        let statusText =
+            "🔵 Online";
+
+
+        if (user.status === "Waiting") {
+
+            statusClass =
+                "waiting";
+
+            statusText =
+                "🟡 Waiting";
+
+        }
+
+
+        if (user.status === "Chatting") {
+
+            statusClass =
+                "chatting";
+
+            statusText =
+                "🟢 Chatting";
+
+        }
+
+
+        const connectedSeconds =
+            Math.floor(
+                (Date.now() -
+                user.connectedAt) / 1000
+            );
+
+
+        let connectedText;
+
+
+        if (connectedSeconds < 60) {
+
+            connectedText =
+                connectedSeconds +
+                " sec";
+
+        }
+
+        else {
+
+            connectedText =
+                Math.floor(
+                    connectedSeconds / 60
+                ) +
+                " min";
+
+        }
+
+
+        row.innerHTML = `
+
+            <td>
+                #${user.id}
+            </td>
+
+            <td class="${statusClass}">
+                ${statusText}
+            </td>
+
+            <td>
+                ${connectedText}
+            </td>
+
+            <td>
+
+                <button
+                    class="disconnect"
+                    onclick="disconnectUser('${user.socketId}')">
+
+                    🔴 Disconnect
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+
+// =========================
+// DISCONNECT USER
+// =========================
+
+async function disconnectUser(socketId) {
+
+    const confirmDisconnect =
+        confirm(
+            "Disconnect this user?"
+        );
+
+
+    if (!confirmDisconnect) {
+        return;
+    }
+
+
+    const response =
+        await fetch(
+            ADMIN_PATH +
+            "/disconnect",
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    socketId
+                })
+
+            }
+        );
+
+
+    const data =
+        await response.json();
+
+
+    if (!data.success) {
+
+        alert(
+            data.error ||
+            "Failed to disconnect user"
+        );
+
+        return;
+
+    }
+
+
+    loadStats();
+
+}
+
+
+
+// =========================
 // LOGOUT
-// ===============================
+// =========================
 
 async function logout() {
 
@@ -463,44 +757,29 @@ async function logout() {
         }
     );
 
+
     location.reload();
 
 }
 
 
-// ===============================
-// CHECK EXISTING LOGIN
-// ===============================
 
-async function checkLogin() {
+// =========================
+// AUTO REFRESH
+// =========================
 
-    try {
-
-        const response =
-            await fetch(
-                ADMIN_PATH + "/auth"
-            );
+setInterval(
+    loadStats,
+    2000
+);
 
 
-        const data =
-            await response.json();
+// Start
 
-
-        if (data.loggedIn) {
-            showDashboard();
-        }
-
-    } catch (err) {
-
-        console.log(err);
-
-    }
-
-}
-
-checkLogin();
+checkAuth();
 
 </script>
+
 
 </body>
 
