@@ -65,6 +65,9 @@ function sendMessage() {
 
     input.value = "";
 
+    // Keep keyboard open
+    input.focus();
+
 }
 
 
